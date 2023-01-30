@@ -1,23 +1,30 @@
 package main
 
 import (
-	"be_test/model"
+	"be_test/controller"
+	"be_test/database"
+	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"net/http"
 )
 
 func main() {
-	viper.SetConfigFile(".env")
-	viper.ReadInConfig()
-	// connect to postgres db with gorm and insert user
-	dsn := "host=" + viper.GetString("HOST") + " user=" + viper.GetString("USER") + " password=" + viper.GetString("PASSWORD") + " dbname=" + viper.GetString("DBNAME") + " port=" + viper.GetString("PORT") + " sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	database.InitDB()
+	gorm := database.DB()
+	dbGorm, err := gorm.DB()
 	if err != nil {
-		panic("failed to connect database")
+		panic(err)
 	}
-	// Migrate the schema
-	db.AutoMigrate(&model.User{})
 
-	db.Create(&model.User{Email: "testing", Password: "testing", Username: "testing"})
+	dbGorm.Ping()
+	//db.Create(&model.User{Email: "testing", Password: "testing", Username: "testing"})
+	e := echo.New()
+
+	userRoute := e.Group("/users")
+	userRoute.POST("/", controller.CreateUser)
+
+	e.GET("/", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, map[string]interface{}{"message": "Hello, World!"})
+	})
+	e.Logger.Fatal(e.Start(":" + viper.GetString("PORT_API")))
 }
