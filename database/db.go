@@ -1,6 +1,7 @@
 package database
 
 import (
+	"be_test/model"
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -8,7 +9,7 @@ import (
 
 var database *gorm.DB
 
-func InitDB() {
+func InitDB() *gorm.DB {
 	viper.SetConfigFile(".env")
 	viper.ReadInConfig()
 
@@ -17,9 +18,6 @@ func InitDB() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-
-}
-
-func DB() *gorm.DB {
+	database.AutoMigrate(&model.User{})
 	return database
 }
