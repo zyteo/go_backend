@@ -1,9 +1,12 @@
 ### Go backend
-Just a simple go backend testing - utilises GORM, echo and viper
+Just a simple go backend testing - utilises GORM, echo and viper.
+Goal is to make a simple CRUD backend with a database for User model.
 
-inserts a record into the database
+Future plans: To include bcrypt and logging.
 
 ### Changelog
+
+4 Feb 2023 - Added future plans statement.
 
 2 Feb 2023 - Added changelog to keep track of changes
 
