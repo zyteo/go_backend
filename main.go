@@ -15,6 +15,9 @@ func main() {
 	userRoute := e.Group("/users")
 	userRoute.POST("/", controller.CreateUser)
 	userRoute.GET("/", controller.GetUsers)
+	userRoute.GET("/id/:id", controller.GetUserById)
+	userRoute.GET("/email/:email", controller.GetUserByEmail)
+	userRoute.GET("/username/:username", controller.GetUserByUsername)
 
 	e.GET("/", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]interface{}{"message": "Hello, World!"})

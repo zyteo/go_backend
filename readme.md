@@ -10,6 +10,8 @@ Future plans: To include bcrypt and logging.
 
 Confirmed that create and read users work, tested with Postman.
 
+Added get user by id, email and username.
+
 4 Feb 2023 - Added future plans statement.
 
 2 Feb 2023 - Added changelog to keep track of changes
