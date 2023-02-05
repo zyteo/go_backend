@@ -9,7 +9,7 @@ import (
 
 func CreateUser(c echo.Context) error {
 	u := new(model.User)
-	db := database.DB()
+	db := database.InitDB()
 
 	if err := c.Bind(u); err != nil {
 		data := map[string]interface{}{
@@ -33,7 +33,7 @@ func CreateUser(c echo.Context) error {
 	}
 
 	response := map[string]interface{}{
-		"message": "Success create user",
+		"message": "Successfully created user",
 		"data":    user,
 	}
 
@@ -41,7 +41,7 @@ func CreateUser(c echo.Context) error {
 }
 
 func GetUsers(c echo.Context) error {
-	db := database.DB()
+	db := database.InitDB()
 	var users []model.User
 	db.Find(&users)
 	return c.JSON(http.StatusOK, users)

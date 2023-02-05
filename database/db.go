@@ -7,8 +7,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var database *gorm.DB
-
 func InitDB() *gorm.DB {
 	viper.SetConfigFile(".env")
 	viper.ReadInConfig()

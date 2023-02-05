@@ -6,6 +6,10 @@ Future plans: To include bcrypt and logging.
 
 ### Changelog
 
+5 Feb 2023 - Adjusted database and user controller code.
+
+Confirmed that create and read users work, tested with Postman.
+
 4 Feb 2023 - Added future plans statement.
 
 2 Feb 2023 - Added changelog to keep track of changes

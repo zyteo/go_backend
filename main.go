@@ -2,21 +2,13 @@ package main
 
 import (
 	"be_test/controller"
-	"be_test/database"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 	"net/http"
 )
 
 func main() {
-	database.InitDB()
-	gorm := database.DB()
-	dbGorm, err := gorm.DB()
-	if err != nil {
-		panic(err)
-	}
 
-	dbGorm.Ping()
 	//db.Create(&model.User{Email: "testing", Password: "testing", Username: "testing"})
 	e := echo.New()
 
