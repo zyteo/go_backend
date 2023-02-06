@@ -87,3 +87,27 @@ func GetUserByUsername(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, user)
 }
+
+func UpdateUser(c echo.Context) error {
+	db := database.InitDB()
+
+	var user model.User
+	db.Where("id = ?", c.Param("id")).First(&user)
+	stringUserID := strconv.Itoa(int(user.ID))
+	if stringUserID != c.Param("id") {
+		data := map[string]interface{}{
+			"error": "User not found, unable to update",
+		}
+		return c.JSON(http.StatusBadRequest, data)
+	}
+	//	get the values of the new email, username and password
+	u := new(model.User)
+	if err := c.Bind(u); err != nil {
+		data := map[string]interface{}{
+			"message": "Failed to update user",
+			"error":   err,
+		}
+		return c.JSON(http.StatusBadRequest, data)
+	}
+
+}
