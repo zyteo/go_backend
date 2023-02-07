@@ -110,4 +110,21 @@ func UpdateUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
+	//but if email or username already exists, return error
+	if db.Where("email = ?", u.Email).First(&user).RowsAffected != 0 {
+		data := map[string]interface{}{
+			"error": "Email already exists",
+		}
+		return c.JSON(http.StatusBadRequest, data)
+	}
+	if db.Where("username = ?", u.Username).First(&user).RowsAffected != 0 {
+		data := map[string]interface{}{
+			"error": "Username already exists",
+		}
+		return c.JSON(http.StatusBadRequest, data)
+	}
+	//	all ok, update the user
+	db.Model(&user).Updates(model.User{Email: u.Email, Username: u.Username, Password: u.Password})
+
+	return c.JSON(http.StatusOK, user)
 }

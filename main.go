@@ -17,6 +17,7 @@ func main() {
 	userRoute.GET("/id/:id", controller.GetUserById)
 	userRoute.GET("/email/:email", controller.GetUserByEmail)
 	userRoute.GET("/username/:username", controller.GetUserByUsername)
+	userRoute.PUT("/id/:id", controller.UpdateUser)
 
 	e.Logger.Fatal(e.Start(":" + viper.GetString("PORT_API")))
 }
