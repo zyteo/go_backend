@@ -6,6 +6,8 @@ Future plans: To include bcrypt and logging.
 
 ### Changelog
 
+12 Feb 2023 - Adjusting update function.
+
 7 Feb 2023 - Adjusting update function.
 
 6 Feb 2023 - Adding update function.

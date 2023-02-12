@@ -3,6 +3,7 @@ package controller
 import (
 	"be_test/database"
 	"be_test/model"
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
@@ -93,6 +94,8 @@ func UpdateUser(c echo.Context) error {
 
 	var user model.User
 	db.Where("id = ?", c.Param("id")).First(&user)
+	fmt.Println("found user", user)
+
 	stringUserID := strconv.Itoa(int(user.ID))
 	if stringUserID != c.Param("id") {
 		data := map[string]interface{}{
@@ -109,22 +112,24 @@ func UpdateUser(c echo.Context) error {
 		}
 		return c.JSON(http.StatusBadRequest, data)
 	}
-
-	//but if email or username already exists, return error
+	fmt.Println("input", u)
+	//
+	////but if email or username already exists, return error
 	if db.Where("email = ?", u.Email).First(&user).RowsAffected != 0 {
 		data := map[string]interface{}{
 			"error": "Email already exists",
 		}
 		return c.JSON(http.StatusBadRequest, data)
 	}
-	if db.Where("username = ?", u.Username).First(&user).RowsAffected != 0 {
-		data := map[string]interface{}{
-			"error": "Username already exists",
-		}
-		return c.JSON(http.StatusBadRequest, data)
-	}
-	//	all ok, update the user
-	db.Model(&user).Updates(model.User{Email: u.Email, Username: u.Username, Password: u.Password})
-
+	fmt.Println("found user 2", user)
+	//if db.Where("username = ?", u.Username).First(&user).RowsAffected != 0 {
+	//	data := map[string]interface{}{
+	//		"error": "Username already exists",
+	//	}
+	//	return c.JSON(http.StatusBadRequest, data)
+	//}
+	////	all ok, update the user
+	//db.Model(&user).Updates(model.User{Email: u.Email, Username: u.Username, Password: u.Password})
+	//
 	return c.JSON(http.StatusOK, user)
 }
