@@ -6,7 +6,9 @@ Future plans: To include bcrypt and logging.
 
 ### Changelog
 
-12 Feb 2023 - Adjusting update function.
+12 Feb 2023 - Adjusted update function.
+
+Confirmed that update user works, tested with Postman.
 
 7 Feb 2023 - Adjusting update function.
 

@@ -3,7 +3,6 @@ package controller
 import (
 	"be_test/database"
 	"be_test/model"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
@@ -91,10 +90,11 @@ func GetUserByUsername(c echo.Context) error {
 
 func UpdateUser(c echo.Context) error {
 	db := database.InitDB()
-
 	var user model.User
+	var userEmail model.User
+	var userUsername model.User
+
 	db.Where("id = ?", c.Param("id")).First(&user)
-	fmt.Println("found user", user)
 
 	stringUserID := strconv.Itoa(int(user.ID))
 	if stringUserID != c.Param("id") {
@@ -103,6 +103,7 @@ func UpdateUser(c echo.Context) error {
 		}
 		return c.JSON(http.StatusBadRequest, data)
 	}
+
 	//	get the values of the new email, username and password
 	u := new(model.User)
 	if err := c.Bind(u); err != nil {
@@ -112,24 +113,26 @@ func UpdateUser(c echo.Context) error {
 		}
 		return c.JSON(http.StatusBadRequest, data)
 	}
-	fmt.Println("input", u)
-	//
-	////but if email or username already exists, return error
-	if db.Where("email = ?", u.Email).First(&user).RowsAffected != 0 {
-		data := map[string]interface{}{
-			"error": "Email already exists",
+
+	//but if email or username already exists, return error
+
+	if u.Email != user.Email {
+		if db.Where("email = ?", u.Email).First(&userEmail).RowsAffected != 0 {
+			data := map[string]interface{}{
+				"error": "Email already exists",
+			}
+			return c.JSON(http.StatusBadRequest, data)
 		}
-		return c.JSON(http.StatusBadRequest, data)
 	}
-	fmt.Println("found user 2", user)
-	//if db.Where("username = ?", u.Username).First(&user).RowsAffected != 0 {
-	//	data := map[string]interface{}{
-	//		"error": "Username already exists",
-	//	}
-	//	return c.JSON(http.StatusBadRequest, data)
-	//}
-	////	all ok, update the user
-	//db.Model(&user).Updates(model.User{Email: u.Email, Username: u.Username, Password: u.Password})
-	//
+	if u.Username != user.Username {
+		if db.Where("username = ?", u.Username).First(&userUsername).RowsAffected != 0 {
+			data := map[string]interface{}{
+				"error": "Username already exists",
+			}
+			return c.JSON(http.StatusBadRequest, data)
+		}
+	}
+	//	all ok, update the user
+	db.Model(&user).Updates(model.User{Email: u.Email, Username: u.Username, Password: u.Password})
 	return c.JSON(http.StatusOK, user)
 }
