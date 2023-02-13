@@ -134,7 +134,11 @@ func UpdateUser(c echo.Context) error {
 	}
 	//	all ok, update the user
 	db.Model(&user).Updates(model.User{Email: u.Email, Username: u.Username, Password: u.Password})
-	return c.JSON(http.StatusOK, user)
+	response := map[string]interface{}{
+		"message": "Successfully updated user",
+		"data":    user,
+	}
+	return c.JSON(http.StatusOK, response)
 }
 
 func DeleteUser(c echo.Context) error {
@@ -150,6 +154,9 @@ func DeleteUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, data)
 	}
 	db.Delete(&user)
-	return c.JSON(http.StatusOK, "User deleted")
+	response := map[string]interface{}{
+		"message": "Successfully deleted user",
+	}
+	return c.JSON(http.StatusOK, response)
 
 }
