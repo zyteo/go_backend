@@ -6,6 +6,8 @@ Future plans: To include bcrypt and logging.
 
 ### Changelog
 
+13 Feb 2023 - Added delete user function. Tested with Postman.
+
 12 Feb 2023 - Adjusted update function.
 
 Confirmed that update user works, tested with Postman.

@@ -136,3 +136,20 @@ func UpdateUser(c echo.Context) error {
 	db.Model(&user).Updates(model.User{Email: u.Email, Username: u.Username, Password: u.Password})
 	return c.JSON(http.StatusOK, user)
 }
+
+func DeleteUser(c echo.Context) error {
+	db := database.InitDB()
+
+	var user model.User
+	db.Where("id = ?", c.Param("id")).First(&user)
+	stringUserID := strconv.Itoa(int(user.ID))
+	if stringUserID != c.Param("id") {
+		data := map[string]interface{}{
+			"error": "User not found, unable to delete",
+		}
+		return c.JSON(http.StatusBadRequest, data)
+	}
+	db.Delete(&user)
+	return c.JSON(http.StatusOK, "User deleted")
+
+}
