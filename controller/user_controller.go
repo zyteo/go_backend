@@ -4,6 +4,7 @@ import (
 	"be_test/database"
 	"be_test/model"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"strconv"
 )
@@ -20,9 +21,19 @@ func CreateUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
+	passwordHashed, err := bcrypt.GenerateFromPassword(u.Password, bcrypt.DefaultCost)
+	if err != nil {
+		data := map[string]interface{}{
+			"message": "Failed to hash password",
+			"error":   err,
+		}
+		return c.JSON(http.StatusBadRequest, data)
+	}
+
+
 	user := &model.User{
 		Email:    u.Email,
-		Password: u.Password,
+		Password: passwordHashed,
 		Username: u.Username,
 	}
 	if err := db.Create(user).Error; err != nil {
