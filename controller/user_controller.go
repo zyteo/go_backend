@@ -143,8 +143,18 @@ func UpdateUser(c echo.Context) error {
 			return c.JSON(http.StatusBadRequest, data)
 		}
 	}
+	
 	//	all ok, update the user
-	db.Model(&user).Updates(model.User{Email: u.Email, Username: u.Username, Password: u.Password})
+	passwordHashed, err := bcrypt.GenerateFromPassword(u.Password, bcrypt.DefaultCost)
+	if err != nil {
+		data := map[string]interface{}{
+			"message": "Failed to hash password",
+			"error":   err,
+		}
+		return c.JSON(http.StatusBadRequest, data)
+	}
+
+	db.Model(&user).Updates(model.User{Email: u.Email, Username: u.Username, Password: passwordHashed})
 	response := map[string]interface{}{
 		"message": "Successfully updated user",
 		"data":    user,
