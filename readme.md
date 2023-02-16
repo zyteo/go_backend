@@ -1,10 +1,18 @@
 ### Go backend
-Just a simple go backend testing - utilises GORM, echo and viper.
+Just a simple go backend testing - utilises GORM, echo, viper and bcrypt.
 Goal is to make a simple CRUD backend with a database for User model.
 
-Future plans: To include bcrypt and logging.
+Future plans: To include logging.
+
+Ideal plans: To include JWT authentication. Most likely on hold first, will move to other projects after adding logging.
 
 ### Changelog
+
+16 Feb 2023 - Adjusted bcrypt for password hashing. Tested with postman.
+
+Added login function and tested with postman.
+
+15 Feb 2023 - Added bcrypt for password hashing.
 
 13 Feb 2023 - Added delete user function. Tested with Postman.
 

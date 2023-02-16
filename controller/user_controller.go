@@ -21,7 +21,7 @@ func CreateUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
-	passwordHashed, err := bcrypt.GenerateFromPassword(u.Password, bcrypt.DefaultCost)
+	passwordHashed, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
 		data := map[string]interface{}{
 			"message": "Failed to hash password",
@@ -30,10 +30,9 @@ func CreateUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
-
 	user := &model.User{
 		Email:    u.Email,
-		Password: passwordHashed,
+		Password: string(passwordHashed),
 		Username: u.Username,
 	}
 	if err := db.Create(user).Error; err != nil {
@@ -143,9 +142,9 @@ func UpdateUser(c echo.Context) error {
 			return c.JSON(http.StatusBadRequest, data)
 		}
 	}
-	
+
 	//	all ok, update the user
-	passwordHashed, err := bcrypt.GenerateFromPassword(u.Password, bcrypt.DefaultCost)
+	passwordHashed, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
 		data := map[string]interface{}{
 			"message": "Failed to hash password",
@@ -154,7 +153,7 @@ func UpdateUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
-	db.Model(&user).Updates(model.User{Email: u.Email, Username: u.Username, Password: passwordHashed})
+	db.Model(&user).Updates(model.User{Email: u.Email, Username: u.Username, Password: string(passwordHashed)})
 	response := map[string]interface{}{
 		"message": "Successfully updated user",
 		"data":    user,
@@ -177,6 +176,39 @@ func DeleteUser(c echo.Context) error {
 	db.Delete(&user)
 	response := map[string]interface{}{
 		"message": "Successfully deleted user",
+	}
+	return c.JSON(http.StatusOK, response)
+
+}
+
+func LoginUser(c echo.Context) error {
+	db := database.InitDB()
+	var user model.User
+	u := new(model.User)
+	if err := c.Bind(u); err != nil {
+		data := map[string]interface{}{
+			"message": "Failed to login user",
+			"error":   err,
+		}
+		return c.JSON(http.StatusBadRequest, data)
+	}
+
+	if db.Where("email = ?", u.Email).First(&user).RowsAffected == 0 {
+		data := map[string]interface{}{
+			"error": "User not found",
+		}
+		return c.JSON(http.StatusBadRequest, data)
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(u.Password)); err != nil {
+		data := map[string]interface{}{
+			"error": "Invalid password",
+		}
+		return c.JSON(http.StatusBadRequest, data)
+	}
+
+	response := map[string]interface{}{
+		"message": "Successfully logged in",
 	}
 	return c.JSON(http.StatusOK, response)
 

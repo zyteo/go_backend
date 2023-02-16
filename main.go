@@ -19,6 +19,7 @@ func main() {
 	userRoute.GET("/username/:username", controller.GetUserByUsername)
 	userRoute.PUT("/id/:id", controller.UpdateUser)
 	userRoute.DELETE("/id/:id", controller.DeleteUser)
+	userRoute.POST("/login", controller.LoginUser)
 
 	e.Logger.Fatal(e.Start(":" + viper.GetString("PORT_API")))
 }
