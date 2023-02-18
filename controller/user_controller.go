@@ -2,14 +2,18 @@ package controller
 
 import (
 	"be_test/database"
+	"be_test/logger"
 	"be_test/model"
 	"github.com/labstack/echo/v4"
+	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"strconv"
 )
 
 func CreateUser(c echo.Context) error {
+	logger.InitLogger()
+
 	u := new(model.User)
 	db := database.InitDB()
 
@@ -18,6 +22,7 @@ func CreateUser(c echo.Context) error {
 			"message": "Failed to create user",
 			"error":   err,
 		}
+		logger.Logger.Error("Failed to create user")
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
@@ -27,6 +32,7 @@ func CreateUser(c echo.Context) error {
 			"message": "Failed to hash password",
 			"error":   err,
 		}
+		logger.Logger.Error("Failed to hash password")
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
@@ -40,14 +46,15 @@ func CreateUser(c echo.Context) error {
 			"message": "Failed to create user",
 			"error":   err,
 		}
+		logger.Logger.Error("Failed to create user")
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
+	logger.Logger.Info("Successfully created user", zap.String("email", user.Email), zap.String("username", user.Username))
 	response := map[string]interface{}{
 		"message": "Successfully created user",
 		"data":    user,
 	}
-
 	return c.JSON(http.StatusCreated, response)
 }
 
