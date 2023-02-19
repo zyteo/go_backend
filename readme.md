@@ -8,6 +8,8 @@ Ideal plans: To include JWT authentication. Most likely on hold first, will move
 
 ### Changelog
 
+19 Feb 2023 - Added logging with zerolog.
+
 18 Feb 2023 - Attempting logging with zap.
 
 16 Feb 2023 - Adjusted bcrypt for password hashing. Tested with postman.

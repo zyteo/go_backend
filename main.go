@@ -2,6 +2,7 @@ package main
 
 import (
 	"be_test/controller"
+	"be_test/logger"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 )
@@ -9,6 +10,9 @@ import (
 func main() {
 	viper.SetConfigFile(".env")
 	viper.ReadInConfig()
+
+	log := logger.InitLogger()
+	log.Info().Str("port", viper.GetString("PORT_API")).Msg("Starting server")
 
 	e := echo.New()
 	userRoute := e.Group("/users")
