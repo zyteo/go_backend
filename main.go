@@ -12,7 +12,7 @@ func main() {
 	viper.ReadInConfig()
 
 	log := logger.InitLogger()
-	log.Info().Str("port", viper.GetString("PORT_API")).Msg("Starting server")
+	log.Info().Msg("Starting server")
 
 	e := echo.New()
 	userRoute := e.Group("/users")

@@ -1,0 +1,18 @@
+{"level":"info","time":"2023-02-20T18:26:26+08:00","message":"Starting server"}
+{"level":"info","time":"2023-02-20T18:29:19+08:00","message":"Get all users"}
+{"level":"info","time":"2023-02-20T18:30:03+08:00","message":"Get all users"}
+{"level":"info","email":"test","username":"test","time":"2023-02-20T18:30:25+08:00","message":"User created"}
+{"level":"info","email":"test1","username":"test1","time":"2023-02-20T18:30:45+08:00","message":"User created"}
+{"level":"info","email":"test2","username":"test2","time":"2023-02-20T18:30:51+08:00","message":"User created"}
+{"level":"error","time":"2023-02-20T18:31:21+08:00","message":"User not found"}
+{"level":"info","email":"test","username":"test","time":"2023-02-20T18:31:24+08:00","message":"Get user by id"}
+{"level":"info","email":"test1","username":"test1","time":"2023-02-20T18:31:30+08:00","message":"Get user by id"}
+{"level":"info","email":"test","username":"test","time":"2023-02-20T18:31:39+08:00","message":"Get user by email"}
+{"level":"error","time":"2023-02-20T18:31:42+08:00","message":"User not found"}
+{"level":"info","email":"test","username":"test","time":"2023-02-20T18:31:48+08:00","message":"Get user by username"}
+{"level":"error","time":"2023-02-20T18:32:20+08:00","message":"User not found, unable to update"}
+{"level":"info","email":"t@test.com","username":"test23","time":"2023-02-20T18:32:37+08:00","message":"Successfully updated user"}
+{"level":"error","time":"2023-02-20T18:32:55+08:00","message":"User not found"}
+{"level":"info","email":"t@test.com","username":"test23","time":"2023-02-20T18:33:02+08:00","message":"Successfully logged in"}
+{"level":"error","time":"2023-02-20T18:33:15+08:00","message":"User not found, unable to delete"}
+{"level":"info","email":"test1","username":"test1","time":"2023-02-20T18:33:21+08:00","message":"Successfully deleted user"}

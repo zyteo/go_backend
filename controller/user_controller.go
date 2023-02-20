@@ -58,13 +58,16 @@ func CreateUser(c echo.Context) error {
 }
 
 func GetUsers(c echo.Context) error {
+	log := logger.InitLogger()
 	db := database.InitDB()
 	var users []model.User
 	db.Find(&users)
+	log.Info().Msg("Get all users")
 	return c.JSON(http.StatusOK, users)
 }
 
 func GetUserById(c echo.Context) error {
+	log := logger.InitLogger()
 	db := database.InitDB()
 	var user model.User
 	db.Where("id = ?", c.Param("id")).First(&user)
@@ -73,12 +76,15 @@ func GetUserById(c echo.Context) error {
 		data := map[string]interface{}{
 			"error": "User not found",
 		}
+		log.Error().Msg("User not found")
 		return c.JSON(http.StatusBadRequest, data)
 	}
+	log.Info().Str("email", user.Email).Str("username", user.Username).Msg("Get user by id")
 	return c.JSON(http.StatusOK, user)
 }
 
 func GetUserByEmail(c echo.Context) error {
+	log := logger.InitLogger()
 	db := database.InitDB()
 	var user model.User
 	db.Where("email = ?", c.Param("email")).First(&user)
@@ -86,12 +92,15 @@ func GetUserByEmail(c echo.Context) error {
 		data := map[string]interface{}{
 			"error": "User not found",
 		}
+		log.Error().Msg("User not found")
 		return c.JSON(http.StatusBadRequest, data)
 	}
+	log.Info().Str("email", user.Email).Str("username", user.Username).Msg("Get user by email")
 	return c.JSON(http.StatusOK, user)
 }
 
 func GetUserByUsername(c echo.Context) error {
+	log := logger.InitLogger()
 	db := database.InitDB()
 	var user model.User
 	db.Where("username = ?", c.Param("username")).First(&user)
@@ -99,12 +108,15 @@ func GetUserByUsername(c echo.Context) error {
 		data := map[string]interface{}{
 			"error": "User not found",
 		}
+		log.Error().Msg("User not found")
 		return c.JSON(http.StatusBadRequest, data)
 	}
+	log.Info().Str("email", user.Email).Str("username", user.Username).Msg("Get user by username")
 	return c.JSON(http.StatusOK, user)
 }
 
 func UpdateUser(c echo.Context) error {
+	log := logger.InitLogger()
 	db := database.InitDB()
 	var user model.User
 	var userEmail model.User
@@ -117,6 +129,7 @@ func UpdateUser(c echo.Context) error {
 		data := map[string]interface{}{
 			"error": "User not found, unable to update",
 		}
+		log.Error().Msg("User not found, unable to update")
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
@@ -127,6 +140,7 @@ func UpdateUser(c echo.Context) error {
 			"message": "Failed to update user",
 			"error":   err,
 		}
+		log.Error().Msg("Failed to update user")
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
@@ -137,6 +151,7 @@ func UpdateUser(c echo.Context) error {
 			data := map[string]interface{}{
 				"error": "Email already exists",
 			}
+			log.Error().Msg("Email already exists")
 			return c.JSON(http.StatusBadRequest, data)
 		}
 	}
@@ -145,6 +160,7 @@ func UpdateUser(c echo.Context) error {
 			data := map[string]interface{}{
 				"error": "Username already exists",
 			}
+			log.Error().Msg("Username already exists")
 			return c.JSON(http.StatusBadRequest, data)
 		}
 	}
@@ -156,6 +172,7 @@ func UpdateUser(c echo.Context) error {
 			"message": "Failed to hash password",
 			"error":   err,
 		}
+		log.Error().Msg("Failed to hash password")
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
@@ -164,10 +181,12 @@ func UpdateUser(c echo.Context) error {
 		"message": "Successfully updated user",
 		"data":    user,
 	}
+	log.Info().Str("email", user.Email).Str("username", user.Username).Msg("Successfully updated user")
 	return c.JSON(http.StatusOK, response)
 }
 
 func DeleteUser(c echo.Context) error {
+	log := logger.InitLogger()
 	db := database.InitDB()
 
 	var user model.User
@@ -177,17 +196,20 @@ func DeleteUser(c echo.Context) error {
 		data := map[string]interface{}{
 			"error": "User not found, unable to delete",
 		}
+		log.Error().Msg("User not found, unable to delete")
 		return c.JSON(http.StatusBadRequest, data)
 	}
 	db.Delete(&user)
 	response := map[string]interface{}{
 		"message": "Successfully deleted user",
 	}
+	log.Info().Str("email", user.Email).Str("username", user.Username).Msg("Successfully deleted user")
 	return c.JSON(http.StatusOK, response)
 
 }
 
 func LoginUser(c echo.Context) error {
+	log := logger.InitLogger()
 	db := database.InitDB()
 	var user model.User
 	u := new(model.User)
@@ -196,6 +218,7 @@ func LoginUser(c echo.Context) error {
 			"message": "Failed to login user",
 			"error":   err,
 		}
+		log.Error().Msg("Failed to login user")
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
@@ -203,6 +226,7 @@ func LoginUser(c echo.Context) error {
 		data := map[string]interface{}{
 			"error": "User not found",
 		}
+		log.Error().Msg("User not found")
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
@@ -210,12 +234,14 @@ func LoginUser(c echo.Context) error {
 		data := map[string]interface{}{
 			"error": "Invalid password",
 		}
+		log.Error().Msg("Invalid password")
 		return c.JSON(http.StatusBadRequest, data)
 	}
 
 	response := map[string]interface{}{
 		"message": "Successfully logged in",
 	}
+	log.Info().Str("email", user.Email).Str("username", user.Username).Msg("Successfully logged in")
 	return c.JSON(http.StatusOK, response)
 
 }

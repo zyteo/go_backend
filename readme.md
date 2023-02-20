@@ -1,12 +1,12 @@
 ### Go backend
-Just a simple go backend testing - utilises GORM, echo, viper and bcrypt.
-Goal is to make a simple CRUD backend with a database for User model.
-
-Future plans: To include logging.
+Simple Go backend - utilises GORM, echo, viper, bcrypt and zerolog.
+This is a simple CRUD backend with a database for User model.
 
 Ideal plans: To include JWT authentication. Most likely on hold first, will move to other projects after adding logging.
 
 ### Changelog
+
+20 Feb 2023 - Adjusted logging with zerolog. Tested and confirmed working. Goal completed.
 
 19 Feb 2023 - Added logging with zerolog.
 
